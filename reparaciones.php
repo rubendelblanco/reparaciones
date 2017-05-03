@@ -1,12 +1,10 @@
 <?php
 /*
 Plugin Name: Incidencias y reparaciones
-Description: example plugin to demonstrate wordpress capatabilities
-Plugin URI: http://mac-blog.org.ua/
-Author URI: http://mac-blog.org.ua/
-Author: Marchenko Alexandr
-License: Public Domain
-Version: 1.1
+Description: Gestión de reparaciones para Colour Mobile Avila
+Author URI: http://hazmeweb.es
+Author: Hazmeweb.es
+Version: 1.0
 */
 
 /**
@@ -484,5 +482,15 @@ function custom_table_example_validate_person($item)
     return implode('<br />', $messages);
 }
 
-add_action('admin_action_reparaciones', 'reparaciones_alta');
-add_action('admin_action_reparaciones_update','reparaciones_update_form' );
+/*Comprueba si woocommerce está instalado*/
+function checar_woocommerce(){
+  if ( !is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+    echo '<div class="notice notice-error is-dismissible"><p>';
+        _e( 'ADVERTENCIA: El plugin "Reparaciones" requiere de WooCommerce para funcionar correctamente.', 'sample-text-domain' );
+    echo '</p></div>';
+  }
+}
+
+add_action ('admin_notices', 'checar_woocommerce');
+add_action ('admin_action_reparaciones', 'reparaciones_alta');
+add_action ('admin_action_reparaciones_update','reparaciones_update_form' );

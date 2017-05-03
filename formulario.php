@@ -37,7 +37,7 @@
       </div>
       <div class="inside">
         <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
-          <label for="marca">Marca y/o modelo</label> <input class="short" type="text" name="marca">
+          <label for="marca">Marca y/o modelo*</label> <input class="short" type="text" name="marca">
         </div>
         <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <label for="rom">Contraseña iCloud</label>
@@ -48,7 +48,7 @@
           <input type="text" name="pinsim"/>
         </div>
         <div style="width:50%" class="form-field form-required term-name-wrap">
-          <label for="descripcion">Descripción de avería</label>
+          <label for="descripcion">Descripción de avería*</label>
           <textarea rows="10" columns="40" class="short" type="text" name="descripcion"></textarea>
         </div>
       </div>
