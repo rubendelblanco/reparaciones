@@ -192,6 +192,7 @@ class Custom_Table_Example_List_Table extends WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox" />', //Render a checkbox instead of text
+            'user_id' => __('Cliente', 'reparaciones'),
             'marca' => __('Marca', 'reparaciones'),
             'descripcion' => __('Descripción', 'reparaciones'),
             'fecha_registro' => __('Fecha', 'reparaciones'),
@@ -209,6 +210,7 @@ class Custom_Table_Example_List_Table extends WP_List_Table
     function get_sortable_columns()
     {
         $sortable_columns = array(
+            'user_id' => array('user_id', false),
             'marca' => array('marca', true),
             'descripcion' => array('descripcion', false),
             'fecha_registro' => array('fecha_registro', false),
