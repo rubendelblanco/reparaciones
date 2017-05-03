@@ -1,4 +1,14 @@
-
+<style>
+label.error{
+  color: red;
+}
+.mensajes-error{
+  display:none;
+  border: 1px solid red;
+  background-color: #ffe5e5;
+  padding:5px;
+}
+</style>
 <?php
   $clientes = get_users(
     array('role' => 'customer','orderby'=> 'last_name','order'=> 'ASC')
@@ -7,7 +17,7 @@
  ?>
 <div class="wrap">
   <h1 class="wp-heading-inline">Resguardo de reparación</h1>
-  <form action="<?php echo esc_url( admin_url('admin.php') ); ?>" method="POST">
+  <form id="altaForm" action="<?php echo esc_url( admin_url('admin.php') ); ?>" method="POST">
     <input type="hidden" name="action" value="reparaciones">
     <input type="hidden" name="tecnico" value="<?php echo $tecnico->ID ?>">
     <div class="postbox" id="boxid">
@@ -15,15 +25,15 @@
         <h3 class="hndle"><span> Resguardo de reparación</span></h3>
       </div>
       <div class="inside">
-        <h4> Fecha de entrega </h4>
+        <h4> Fecha de entrega* </h4>
         <div class="form-field form-required term-name-wrap" style="display:inline-block; width:60px">
-          <label for="dia">Día</label> <input id = "dia" type="text" name="dia">
+          <label for="dia">Día</label> <input id = "dia" type="text" name="dia" data-msg-required="Introduzca un dia de mes<br/>" required>
         </div>
-        <div class="form-field form-required term-name-wrap" style="display:inline-block; width:60px">
+        <div class="form-field form-required term-name-wrap" style="display:inline-block; width:60px" data-msg-required="Introduzca un mes (formato: 1-12)<br/>" required>
           <label for="mes">Mes</label> <input id="mes" type="text" name="mes">
         </div>
         <div class="form-field form-required term-name-wrap"  style="display:inline-block; width:60px" >
-          <label for="ano">Año</label> <input id = "ano" type="text" name="ano">
+          <label for="ano">Año</label> <input id = "ano" type="text" name="ano" minlength="4" maxlength="4" data-msg-required="Introduzca un año (cuatro cifras. Ejemplo: 2015)<br/>" required>
         </div>
       </div>
       <div class="inside">
@@ -37,7 +47,7 @@
       </div>
       <div class="inside">
         <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
-          <label for="marca">Marca y/o modelo*</label> <input class="short" type="text" name="marca">
+          <label for="marca">Marca y/o modelo*</label> <input class="short" type="text" name="marca" required data-msg-required="Introduzca una marca o modelo de movil<br/>">
         </div>
         <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <label for="rom">Contraseña iCloud</label>
@@ -49,13 +59,13 @@
         </div>
         <div style="width:50%" class="form-field form-required term-name-wrap">
           <label for="descripcion">Descripción de avería*</label>
-          <textarea rows="10" columns="40" class="short" type="text" name="descripcion"></textarea>
+          <textarea rows="10" columns="40" class="short" type="text" name="descripcion" data-msg-required="La descripción de la avería es obligatoria<br/>" required></textarea>
         </div>
       </div>
       <div class="inside">
         <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
           <input type="hidden" name="testeo" value="0" />
-          <input type="checkbox" name="testeo" value="1" />
+          <input type="checkbox" name="testeo" value="1" required/>
           <label for="testeo">Testeo previo a aceptación del aparato*</label>
         </div>
         <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
@@ -132,11 +142,14 @@
       <div class="inside">
         <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
           <label for="presupuesto">Presupuesto aproximado de la reparación (IVA incluído)</label>
-          <input type="text" name="presupuesto">
+          <input type="text" name="presupuesto" min="0" value="0" required number="true"> &euro;
         </div>
       </div>
       <div class="inside">
         <input type="submit" value="Dar de alta" class="button button-primary">
+      </div>
+      <div class="inside">
+        <div class="mensajes-error"><h4>Se han encontrado los siguientes errores:</h4></div>
       </div>
     </div>
   </form>
@@ -151,4 +164,25 @@
     jQuery('#mes').val(mes+1);
     jQuery('#dia').val(dia);
   })
+</script>
+<script>
+jQuery("#altaForm").validate({
+  errorLabelContainer: jQuery(".mensajes-error"),
+  messages: {
+      ano:{
+        minlength: "El año debe tener cuatro cifras<br/>",
+        maxlength: "El año debe tener cuatro cifras<br/>"
+      },
+      testeo:{
+        required: "Se debe aceptar el testeo previo del aparato<br/>"
+      },
+      presupuesto:{
+        required: "Es obligatorio poner un presupuesto<br/>",
+        number: "El valor del presupuesto debe ser un numero. Poner decimales con puntos. Ej: 45.10<br/>",
+        min: "El presupuesto no puede ser negativo<br/>"
+      }
+		}
+});
+
+//jQuery("#altaForm").validate();
 </script>

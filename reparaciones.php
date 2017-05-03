@@ -491,6 +491,11 @@ function checar_woocommerce(){
   }
 }
 
+function cargar_validacion(){
+  wp_enqueue_script( 'validator', plugins_url( '/jquery-validation/dist/jquery.validate.js', __FILE__ ), array ( 'jquery' ), 1.16, false);
+}
+
+add_action( 'admin_enqueue_scripts', 'cargar_validacion' );
 add_action ('admin_notices', 'checar_woocommerce');
 add_action ('admin_action_reparaciones', 'reparaciones_alta');
 add_action ('admin_action_reparaciones_update','reparaciones_update_form' );
