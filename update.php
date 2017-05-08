@@ -14,8 +14,8 @@
   $mes = substr($result['fecha_entrega'],4,2);
   $dia = substr($result['fecha_entrega'],6,2);
   $preguntas = unserialize($result['preguntas']);
-  $query2 = "SELECT $pivote.id, $pivote.fecha, $estados.descripcion".
-  " FROM $pivote, $estados WHERE $pivote.incidencia_id=1".
+  $query2 = "SELECT $pivote.id, $pivote.fecha, $estados.descripcion, estado_id".
+  " FROM $pivote, $estados WHERE $pivote.incidencia_id=$id".
   " AND $pivote.estado_id = $estados.id ORDER BY $pivote.fecha DESC";
   $result2 = $wpdb->get_results($query2, ARRAY_A);
   $query3 = "SELECT * from $estados";
@@ -30,6 +30,7 @@
   </h2>
   <form action="<?php echo esc_url( admin_url('admin.php') ); ?>" method="POST">
     <input type="hidden" name="action" value="reparaciones_update">
+    <input type="hidden" name="id" value="<?php echo intval($_GET['id'])?>">
     <input type="hidden" name="tecnico" value="<?php echo $tecnico->ID ?>">
     <div id="tab-1">
       <div class="postbox" id="boxid-1">
@@ -62,7 +63,7 @@
           <ul>
             <?php foreach ($result2 as $r):
               $time = strtotime($r['fecha']);
-              echo '<li>'.$r['descripcion'].' el día '.date("d/m/Y", $time).' a las '.date("H:i:s", $time).'</li>';
+              echo '<li> <b>'.$r['descripcion'].'</b> registrado el día '.date("d/m/Y", $time).' a las '.date("H:i:s", $time).'</li>';
               endforeach;
             ?>
           </ul>
@@ -126,7 +127,7 @@
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="rom" value="0" />
-            <input type="checkbox" name="rom" value="1" <?php if ($preguntas['rom']==1) echo 'checked' ?>/>
+            <input type="checkbox" name="rom" value="1" <?php if ($preguntas['testeo']==1) echo 'rom' ?>/>
             <label for="rom">¿Se ha cambiado la ROM original?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
