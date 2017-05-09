@@ -1,10 +1,12 @@
 <?php
 /*
 Plugin Name: Incidencias y reparaciones
-Description: Gestión de reparaciones para Colour Mobile Avila
-Author URI: http://hazmeweb.es
-Author: Hazmeweb.es
-Version: 1.0
+Description: example plugin to demonstrate wordpress capatabilities
+Plugin URI: http://mac-blog.org.ua/
+Author URI: http://mac-blog.org.ua/
+Author: Marchenko Alexandr
+License: Public Domain
+Version: 1.1
 */
 
 /**
@@ -158,7 +160,7 @@ class Custom_Table_Example_List_Table extends WP_List_Table
         $actions = array(
             'edit' => sprintf('<a href="?page=reparaciones_update&id=%s">%s</a>', $item['id'], __('Editar', 'reparaciones')),
             'delete' => sprintf('<a href="?page=%s&action=delete&id=%s">%s</a>', $_REQUEST['page'], $item['id'], __('Borrar', 'reparaciones')),
-            'PDF' => sprintf('<a href="?page=create_PDF&id=%s">%s</a>', $item['id'], __('PDF', 'reparaciones')),
+            'PDF' => sprintf('<a href="#" class="pdf-conversion" data-action="http://localhost/wordpress/wp-content/plugins/reparaciones/pdf/pdf.php?id=%s">%s</a>', $item['id'], __('PDF', 'reparaciones')),
         );
 
         return sprintf('%s %s',
@@ -192,7 +194,6 @@ class Custom_Table_Example_List_Table extends WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox" />', //Render a checkbox instead of text
-            'user_id' => __('Cliente', 'reparaciones'),
             'marca' => __('Marca', 'reparaciones'),
             'descripcion' => __('Descripción', 'reparaciones'),
             'fecha_registro' => __('Fecha', 'reparaciones'),
@@ -210,7 +211,6 @@ class Custom_Table_Example_List_Table extends WP_List_Table
     function get_sortable_columns()
     {
         $sortable_columns = array(
-            'user_id' => array('user_id', false),
             'marca' => array('marca', true),
             'descripcion' => array('descripcion', false),
             'fecha_registro' => array('fecha_registro', false),
@@ -356,7 +356,19 @@ function reparaciones_handler()
         <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>"/>
         <?php $table->display() ?>
     </form>
+    <script>
+        jQuery(function () {
+            jQuery('.pdf-conversion').click(function (e) {
+                e.preventDefault();
 
+                jQuery('<form>').attr({
+                    'action': jQuery(this).data('action'),
+                    'method': 'POST'
+                }).appendTo('body').submit().remove();
+
+            });
+        });
+    </script>
 </div>
 <?php
 }
@@ -433,7 +445,7 @@ function reparaciones_alta(){
         '%s'
     );
     $success=$wpdb->insert( $table, $data, $format );
-
+    echo $sucess;
     if($success){
       $lastid = $wpdb->insert_id;
       $table = $wpdb->prefix.'incidencias_listado_estados';
@@ -448,7 +460,7 @@ function reparaciones_alta(){
       $wpdb->insert( $table, $data, $format );
       echo 'data has been saved' ;
     }
-    else{ print_r($data);}
+    else{ echo 'error';}
   }
 }
 
@@ -457,7 +469,7 @@ function reparaciones_update(){
 }
 
 function reparaciones_update_form(){
-
+  include('reparaciones_update_form.php');
 }
 
 function create_PDF(){
@@ -492,12 +504,10 @@ function checar_woocommerce(){
     echo '</p></div>';
   }
 }
-
 function cargar_validacion(){
   wp_enqueue_script( 'validator', plugins_url( '/jquery-validation/dist/jquery.validate.js', __FILE__ ), array ( 'jquery' ), 1.16, false);
 }
-
 add_action( 'admin_enqueue_scripts', 'cargar_validacion' );
 add_action ('admin_notices', 'checar_woocommerce');
-add_action ('admin_action_reparaciones', 'reparaciones_alta');
-add_action ('admin_action_reparaciones_update','reparaciones_update_form' );
+add_action('admin_action_reparaciones', 'reparaciones_alta');
+add_action('admin_action_reparaciones_update','reparaciones_update_form' );
