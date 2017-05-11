@@ -241,14 +241,17 @@ class Custom_Table_Example_List_Table extends WP_List_Table
     function process_bulk_action()
     {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'incidencias_listado'; // do not forget about tables prefix
+        $table_name = $wpdb->prefix . 'incidencias_listado_estados'; // do not forget about tables prefix
+        $table_listado = $wpdb->prefix . 'incidencias_listado';
 
         if ('delete' === $this->current_action()) {
+
             $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : array();
             if (is_array($ids)) $ids = implode(',', $ids);
 
             if (!empty($ids)) {
-                $wpdb->query("DELETE FROM $table_name WHERE id IN($ids)");
+                $wpdb->query("DELETE FROM $table_name WHERE incidencia_id IN ($ids)");
+                $wpdb->query("DELETE FROM $table_listado WHERE id IN ($ids)");
             }
         }
     }
@@ -341,7 +344,7 @@ function reparaciones_handler()
 
     $message = '';
     if ('delete' === $table->current_action()) {
-        $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Items deleted: %d', 'custom_table_example'), count($_REQUEST['id'])) . '</p></div>';
+        $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Elementos borrados: %d', 'custom_table_example'), count($_REQUEST['id'])) . '</p></div>';
     }
     ?>
 <div class="wrap">
@@ -457,7 +460,7 @@ function reparaciones_update(){
 }
 
 function reparaciones_update_form(){
-
+  include('reparaciones_update_form.php');
 }
 
 function create_PDF(){
@@ -501,3 +504,4 @@ add_action( 'admin_enqueue_scripts', 'cargar_validacion' );
 add_action ('admin_notices', 'checar_woocommerce');
 add_action ('admin_action_reparaciones', 'reparaciones_alta');
 add_action ('admin_action_reparaciones_update','reparaciones_update_form' );
+//add_action
