@@ -41,7 +41,6 @@ label.error{
           <?php foreach($clientes as $cliente){
             echo '<option value="'.$cliente->id.'">'.$cliente->last_name.', '.$cliente->first_name.' ('.$cliente->user_email.')</option>';
           }
-
           ?>
         </select>
       </div>
@@ -183,6 +182,5 @@ jQuery("#altaForm").validate({
       }
 		}
 });
-
-//jQuery("#altaForm").validate();
+jQuery("#altaForm").validate();
 </script>
