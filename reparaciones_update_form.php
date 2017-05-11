@@ -26,36 +26,6 @@ if ( ! empty( $_POST ) ) {
     'cargador' => $_POST['cargador'],
     'sustitucion' => $_POST['sustitucion']
   );
-/*
-  $data = array(
-      'user_id' => $_POST['cliente'],
-      'tecnico_id' => $_POST['tecnico'],
-      'marca' =>$_POST['marca'],
-      'descripcion' =>$_POST['descripcion'],
-      'password' => $_POST['contrasena'],
-      'pinsim' => $_POST['pinsim'],
-      'preguntas' => serialize($preguntas),
-      'presupuesto' => $_POST['presupuesto'],
-      'fecha_entrega' => $ano.$mes.$dia,
-      'resultado_reparacion' => $_POST['resultado_reparacion']
-  );
-
-  $format = array (
-    '%d',
-    '%d',
-    '%s',
-    '%s',
-    '%s',
-    '%s',
-    '%s',
-    '%s',
-    '%s',
-    '%d'
-  );
-
-  $where = array( 'id' => $id);
-  $success=$wpdb->update( $table, $data, $where);
-  var_dump($wpdb->last_query);*/
 
   $sql4 = "UPDATE `wp_incidencias_listado` SET `user_id` = ".$_POST['cliente'].",`tecnico_id` = ".$_POST['tecnico'].",
   `marca` = '".$_POST['marca']."',`descripcion` = '".$_POST['descripcion']."' ,`password` = '".$_POST['contrasena']."',`pinsim` = '".$_POST['pinsim']."',
@@ -64,8 +34,8 @@ if ( ! empty( $_POST ) ) {
 `fecha_entrega` = '".$ano.$mes.$dia."',
 `resultado_reparacion` = '".$_POST['resultado_reparacion']."'
 WHERE `id` = $id";
-echo $sql4;
 $success = $wpdb->query($sql4);
+
   if($success){
     $table = $wpdb->prefix.'incidencias_listado_estados';
     $data = array(
@@ -77,7 +47,8 @@ $success = $wpdb->query($sql4);
         '%s'
     );
     $wpdb->insert( $table, $data, $format );
-    echo 'data has been saved' ;
+    $admin_url = get_admin_url();
+    wp_redirect( $admin_url.'admin.php?page=reparaciones' );
   }
   else{ echo $success; echo 'error';}
 }
