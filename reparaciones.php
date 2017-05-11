@@ -194,9 +194,12 @@ class Custom_Table_Example_List_Table extends WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox" />', //Render a checkbox instead of text
+            'cliente' => __('Cliente','reparaciones'),
+            'user_email'  => __('E-mail','reparaciones'),
             'marca' => __('Marca', 'reparaciones'),
             'descripcion' => __('Descripción', 'reparaciones'),
-            'fecha_registro' => __('Fecha', 'reparaciones'),
+            'fecha_registro' => __('Fecha registro', 'reparaciones'),
+            'tecnico' => __('Técnico', 'reparaciones')
         );
         return $columns;
     }
@@ -211,8 +214,9 @@ class Custom_Table_Example_List_Table extends WP_List_Table
     function get_sortable_columns()
     {
         $sortable_columns = array(
+            'cliente' => array('display_name', true),
+            'user_email' => array('user_email',true),
             'marca' => array('marca', true),
-            'descripcion' => array('descripcion', false),
             'fecha_registro' => array('fecha_registro', false),
         );
         return $sortable_columns;
@@ -265,8 +269,8 @@ class Custom_Table_Example_List_Table extends WP_List_Table
     {
         global $wpdb;
         $table_name = $wpdb->prefix . 'incidencias_listado'; // do not forget about tables prefix
-
-        $per_page = 5; // constant, how much records will be shown per page
+        $table_users = $wpdb->prefix.'users';
+        $per_page = 10; // constant, how much records will be shown per page
 
         $columns = $this->get_columns();
         $hidden = array();
@@ -288,7 +292,12 @@ class Custom_Table_Example_List_Table extends WP_List_Table
 
         // [REQUIRED] define $items array
         // notice that last argument is ARRAY_A, so we will retrieve array
-        $this->items = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name ORDER BY $orderby $order LIMIT %d OFFSET %d", $per_page, $paged), ARRAY_A);
+        //SELECT DISTINCT cliente.user_email, cliente.display_name AS cliente, tecnico.display_name AS tecnico, descripcion, marca, fecha_entrega FROM
+        //wp_users, wp_incidencias_listado JOIN wp_users cliente ON cliente.ID = wp_incidencias_listado.user_id JOIN wp_users tecnico ON tecnico.ID = wp_incidencias_listado.tecnico_id
+        $query = "SELECT DISTINCT cliente.user_email, cliente.display_name AS cliente, tecnico.display_name AS tecnico, descripcion, marca, fecha_registro".
+         " FROM $table_users, $table_name JOIN $table_users cliente ON cliente.ID = ".$table_name.".user_id JOIN $table_users tecnico ON tecnico.ID = ".$table_name.".tecnico_id";
+        //$this->items = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name ORDER BY $orderby $order LIMIT %d OFFSET %d", $per_page, $paged), ARRAY_A);
+        $this->items = $wpdb->get_results($wpdb->prepare($query, $per_page, $paged), ARRAY_A);
 
         // [REQUIRED] configure pagination
         $this->set_pagination_args(array(
@@ -510,13 +519,9 @@ function checar_woocommerce(){
 function cargar_validacion(){
   wp_enqueue_script( 'validator', plugins_url( '/jquery-validation/dist/jquery.validate.js', __FILE__ ), array ( 'jquery' ), 1.16, false);
 }
+
+//actions
 add_action( 'admin_enqueue_scripts', 'cargar_validacion' );
 add_action ('admin_notices', 'checar_woocommerce');
-<<<<<<< HEAD
 add_action ('admin_action_reparaciones', 'reparaciones_alta');
 add_action ('admin_action_reparaciones_update','reparaciones_update_form' );
-//add_action
-=======
-add_action('admin_action_reparaciones', 'reparaciones_alta');
-add_action('admin_action_reparaciones_update','reparaciones_update_form' );
->>>>>>> 4f58ca0cb865a9de64820da8b3c6b77b7cd7d6b2
