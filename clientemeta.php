@@ -16,7 +16,6 @@ function show_clientemeta($user){?>
 <?php }
  function save_clientemeta( $user_id){
    if (!current_user_can('edit_user', $user_id)) return false;
-   update_usermeta($user_id,'telefono', $_POST['telefono']);
    update_usermeta($user_id,'dni', $_POST['dni']);
  }
 ?>

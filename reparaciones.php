@@ -521,6 +521,7 @@ function cargar_validacion(){
 }
 
 //actions
+include('clientemeta.php');
 add_action( 'admin_enqueue_scripts', 'cargar_validacion' );
 add_action ('admin_notices', 'checar_woocommerce');
 add_action ('admin_action_reparaciones', 'reparaciones_alta');
