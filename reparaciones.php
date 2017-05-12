@@ -194,9 +194,9 @@ class Custom_Table_Example_List_Table extends WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox" />', //Render a checkbox instead of text
+            'marca' => __('Marca', 'reparaciones'),
             'cliente' => __('Cliente','reparaciones'),
             'user_email'  => __('E-mail','reparaciones'),
-            'marca' => __('Marca', 'reparaciones'),
             'descripcion' => __('Descripción', 'reparaciones'),
             'fecha_registro' => __('Fecha registro', 'reparaciones'),
             'tecnico' => __('Técnico', 'reparaciones')
@@ -294,7 +294,7 @@ class Custom_Table_Example_List_Table extends WP_List_Table
         // notice that last argument is ARRAY_A, so we will retrieve array
         //SELECT DISTINCT cliente.user_email, cliente.display_name AS cliente, tecnico.display_name AS tecnico, descripcion, marca, fecha_entrega FROM
         //wp_users, wp_incidencias_listado JOIN wp_users cliente ON cliente.ID = wp_incidencias_listado.user_id JOIN wp_users tecnico ON tecnico.ID = wp_incidencias_listado.tecnico_id
-        $query = "SELECT DISTINCT cliente.user_email, cliente.display_name AS cliente, tecnico.display_name AS tecnico, descripcion, marca, fecha_registro".
+        $query = "SELECT DISTINCT cliente.user_email, cliente.display_name AS cliente, tecnico.display_name AS tecnico, wp_incidencias_listado.id, descripcion, marca, fecha_registro".
          " FROM $table_users, $table_name JOIN $table_users cliente ON cliente.ID = ".$table_name.".user_id JOIN $table_users tecnico ON tecnico.ID = ".$table_name.".tecnico_id";
         //$this->items = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name ORDER BY $orderby $order LIMIT %d OFFSET %d", $per_page, $paged), ARRAY_A);
         $this->items = $wpdb->get_results($wpdb->prepare($query, $per_page, $paged), ARRAY_A);
@@ -350,7 +350,6 @@ function reparaciones_handler()
 
     $table = new Custom_Table_Example_List_Table();
     $table->prepare_items();
-
     $message = '';
     if ('delete' === $table->current_action()) {
         $message = '<div class="updated below-h2" id="message"><p>' . sprintf(__('Elementos borrados: %d', 'custom_table_example'), count($_REQUEST['id'])) . '</p></div>';
@@ -470,7 +469,8 @@ function reparaciones_alta(){
           '%s'
       );
       $wpdb->insert( $table, $data, $format );
-      echo 'data has been saved' ;
+      $admin_url = get_admin_url();
+      wp_redirect( $admin_url.'admin.php?page=reparaciones' );
     }
     else{ echo 'error';}
   }
@@ -516,6 +516,13 @@ function checar_woocommerce(){
     echo '</p></div>';
   }
 }
+
+function anuncio_alta_creada(){
+    echo '<div class="notice notice-error is-dismissible"><p>';
+        _e( 'Nueva alta creada', 'sample-text-domain' );
+    echo '</p></div>';
+}
+
 function cargar_validacion(){
   wp_enqueue_script( 'validator', plugins_url( '/jquery-validation/dist/jquery.validate.js', __FILE__ ), array ( 'jquery' ), 1.16, false);
 }
