@@ -197,7 +197,6 @@ class Custom_Table_Example_List_Table extends WP_List_Table
             'marca' => __('Marca', 'reparaciones'),
             'cliente' => __('Cliente','reparaciones'),
             'user_email'  => __('E-mail','reparaciones'),
-            'descripcion' => __('Descripción', 'reparaciones'),
             'fecha_registro' => __('Fecha registro', 'reparaciones'),
             'tecnico' => __('Técnico', 'reparaciones')
         );
@@ -296,13 +295,19 @@ class Custom_Table_Example_List_Table extends WP_List_Table
         //wp_users, wp_incidencias_listado JOIN wp_users cliente ON cliente.ID = wp_incidencias_listado.user_id JOIN wp_users tecnico ON tecnico.ID = wp_incidencias_listado.tecnico_id
         $query = "SELECT DISTINCT cliente.user_email, cliente.display_name AS cliente, tecnico.display_name AS tecnico, wp_incidencias_listado.id, descripcion, marca, fecha_registro".
          " FROM $table_users, $table_name JOIN $table_users cliente ON cliente.ID = ".$table_name.".user_id JOIN $table_users tecnico ON tecnico.ID = ".$table_name.".tecnico_id";
-        //$this->items = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name ORDER BY $orderby $order LIMIT %d OFFSET %d", $per_page, $paged), ARRAY_A);
+
+        //consulta de busqueda
+        if (isset( $_REQUEST ["s"] )){
+           $search = $_REQUEST["s"];
+           $query .= " WHERE cliente.display_name LIKE '%%{$search}%%' OR marca LIKE '%%{$search}%%'";
+         }
         $this->items = $wpdb->get_results($wpdb->prepare($query, $per_page, $paged), ARRAY_A);
 
         // [REQUIRED] configure pagination
         $this->set_pagination_args(array(
             'total_items' => $total_items, // total items defined above
             'per_page' => $per_page, // per page constant defined at top of method
+            'search' =>$_REQUEST["s"] , // busqueda
             'total_pages' => ceil($total_items / $per_page) // calculate pages count
         ));
 
@@ -364,6 +369,7 @@ function reparaciones_handler()
     <?php echo $message; ?>
 
     <form id="persons-table" method="GET">
+        <?php $table->search_box('Buscar', 'search'); ?>
         <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>"/>
         <?php $table->display() ?>
     </form>
