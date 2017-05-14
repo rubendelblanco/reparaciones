@@ -6,8 +6,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link href="pdf.css" rel="stylesheet" />
+        <style>
+        @page {
+            margin-top: 0.3em;
+        }
+        body{
+          font-size:small;
+        }
+        </style>
     </head>
-    <body style="margin-top:-20px">
+    <body>
 
         <?php
             $incidencias = $table_prefix.'incidencias_listado';
@@ -40,7 +48,7 @@
 
         <table width="100%" border="0">
           <tr>
-            <td><b>Fecha de entrega:</b> <?php echo $dia.'/'.$mes.'/'.$ano ?></td>
+            <td><b>Fecha de entrega:</b> <?php echo $dia.'/'.$mes.'/'.$ano ?> <span style="font-size:12px">(Fecha Registro:<?php echo $result['fecha_registro']?>)</span></td>
             <td colspan="2"><b>Marca/modelo: </b><?php echo $result['marca'] ?></td>
           </tr>
           <tr>
