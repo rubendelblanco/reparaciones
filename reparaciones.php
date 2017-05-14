@@ -38,6 +38,7 @@ function custom_table_example_install()
     codigo_bloqueo VARCHAR(24) NOT NULL,
     presupuesto VARCHAR(24),
     resultado_reparacion BOOLEAN NULL,
+    numero_registro VARCHAR(16),
     fecha_registro datetime DEFAULT current_timestamp NOT NULL,
     PRIMARY KEY  (id),
     FOREIGN KEY (user_id) REFERENCES wp_users(id),
@@ -61,15 +62,6 @@ function custom_table_example_install()
   dbDelta( $sql2 );
   dbDelta( $sql3 );
   dbDelta( $sql4 );
-
-  //anadir rol de tecnico
-  global $wp_roles;
-  if ( ! isset( $wp_roles ) )
-      $wp_roles = new WP_Roles();
-
-  $edit = $wp_roles->get_role('editor');
-  //Adding a 'new_role' with all admin caps
-  $wp_roles->add_role('tecnico', 'Técnico', $adm->capabilities);
 }
 
 register_activation_hook(__FILE__, 'custom_table_example_install');
@@ -410,6 +402,8 @@ function reparaciones_alta(){
     if($success){
       $lastid = $wpdb->insert_id;
       $table = $wpdb->prefix.'incidencias_listado_estados';
+
+      //creamos un nuevo estado para esa incidencia
       $data = array(
         'estado_id' => 1,
         'incidencia_id' => $lastid
@@ -419,6 +413,16 @@ function reparaciones_alta(){
           '%s'
       );
       $wpdb->insert( $table, $data, $format );
+      //nuevo registro para esa incidencia: Ymd-$id
+      /*
+      $fecha = date("Ymd");
+      $lastid = $wpdb->insert_id; //el id
+      $registro = $fecha.'-'.$lastid;
+      echo 'id: '.$lastid.' registro: '.$registro;
+      $sql = "UPDATE ". $wpdb->prefix."incidencias_listado SET numero_registro='".$registro."' WHERE id=$lastid";
+      echo $sql;
+      die();
+      $wpdb->query($sql);*/
       $admin_url = get_admin_url();
       wp_redirect( $admin_url.'admin.php?page=reparaciones' );
     }
@@ -469,8 +473,32 @@ function cargar_validacion(){
   wp_enqueue_script( 'validator', plugins_url( '/jquery-validation/dist/jquery.validate.js', __FILE__ ), array ( 'jquery' ), 1.16, false);
 }
 
+function crear_rol_tecnico() {
+  remove_role( 'tecnico' );
+
+  if (!$GLOBALS['wp_roles']->is_role( 'tecnico' )){
+    $permisos = array(
+      'activate_plugin'       =>  true,
+      'activate_plugins'      =>  true,
+      'update_plugins'        =>  true,
+      'edit_posts'            =>  true,
+      'edit_private_pages'    =>  true,
+      'edit_private_posts'    =>  true,
+      'manage_options'        =>  true,
+      'manage_theme'          =>  true,
+      'read'                  =>  true,
+      'read_private_pages'    =>  true,
+      'read_private_pages'    =>  true,
+
+    );
+
+    add_role('tecnico', 'Técnico', $permisos);
+  }
+}
+
 //actions
 include('clientemeta.php');
+register_activation_hook( __FILE__, 'crear_rol_tecnico' );
 add_action( 'admin_enqueue_scripts', 'cargar_validacion' );
 add_action ('admin_notices', 'checar_woocommerce');
 add_action ('admin_action_reparaciones', 'reparaciones_alta');

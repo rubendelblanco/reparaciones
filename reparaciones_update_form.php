@@ -34,6 +34,7 @@ if ( ! empty( $_POST ) ) {
 `fecha_entrega` = '".$ano.$mes.$dia."',
 `resultado_reparacion` = '".$_POST['resultado_reparacion']."'
 WHERE `id` = $id";
+
 $success = $wpdb->query($sql4);
 
   if($success){
@@ -47,9 +48,34 @@ $success = $wpdb->query($sql4);
         '%s'
     );
     $wpdb->insert( $table, $data, $format );
+    //mandar_mail
+    envio_mail($_POST['cliente'],$id);
     $admin_url = get_admin_url();
     wp_redirect( $admin_url.'admin.php?page=reparaciones' );
   }
-  else{ echo $success; echo 'error';}
+  else{echo 'error';}
+}
+
+function envio_mail($id_user,$id){
+  global $wpdb;
+  $sql = "SELECT ".$wpdb->prefix."incidencias_listado.id, ".$wpdb->prefix."incidencias_estados.descripcion, fecha, marca FROM ".$wpdb->prefix."incidencias_listado_estados, ".
+  $wpdb->prefix."incidencias_listado, ".$wpdb->prefix."incidencias_estados".
+  " WHERE ".$wpdb->prefix."incidencias_listado_estados.estado_id=".$wpdb->prefix."incidencias_estados.id AND ".$wpdb->prefix."incidencias_listado.user_id=$id_user".
+  " AND ".$wpdb->prefix."incidencias_listado.id = $id AND ".$wpdb->prefix."incidencias_listado_estados.incidencia_id = $id ORDER BY fecha DESC";
+  $result_estados = $wpdb->get_results($sql, ARRAY_A);
+  $lista_estados='';
+
+  foreach($result_estados as $v){
+    $time = strtotime($r['fecha']);
+    $lista_estados .= '<li>'.$v['descripcion'].' el día '.date("d/m/Y", $time).' a las '.date("H:i:s", $time).'</li>';
+  }
+
+  $direccion = get_userdata( $id_user )->user_email;
+  $subject = 'Actualización de su reparación';
+  $headers = array('Content-Type: text/html; charset=UTF-8');
+  $body = '<p>Su reparación del movil modelo '.$result_estados[0]['marca'].' con referencia nº '.$result_estados[0]['id'].' ha sido actualizada.</p>';
+  $body .= '<p>El historial de estado de su móvil es el siguiente:</p> ';
+  $body .= '<ul>'.$lista_estados.'</ul>';
+  wp_mail( $direccion, $subject, $body, $headers );
 }
  ?>
