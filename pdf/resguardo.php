@@ -7,7 +7,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link href="pdf.css" rel="stylesheet" />
     </head>
-    <body>
+    <body style="margin-top:-20px">
 
         <?php
             $incidencias = $table_prefix.'incidencias_listado';
@@ -36,26 +36,28 @@
             }
         ?>
 
-
         <h3 class="header">Colour Mobile Ávila - resguardo de reparación nº <?php echo $result['id']?></h3>
-        <table width="100%" border="1">
+
+        <table width="100%" border="0">
           <tr>
-            <th>Fecha de entrega: <br/><?php echo $dia.'/'.$mes.'/'.$ano ?></th>
-            <th>Nombre de cliente: <br/><?php echo $result['display_name']?></th>
-            <th>DNI: <br/><?php echo $meta['dni'];?></th>
-            <th>Tlf: <br/><?php echo $meta['billing_phone']?></th>
-            <th>Marca/modelo: <br/> <?php echo $result['marca'] ?></th>
+            <td><b>Fecha de entrega:</b> <?php echo $dia.'/'.$mes.'/'.$ano ?></td>
+            <td colspan="2"><b>Marca/modelo: </b><?php echo $result['marca'] ?></td>
+          </tr>
+          <tr>
+            <td><b>Nombre de cliente:</b> <?php echo $result['display_name']?></td>
+            <td><b>DNI:</b> <?php echo $meta['dni'];?></td>
+            <td><b>Tlf:</b> <?php echo $meta['billing_phone']?></td>
           </tr>
         </table>
-        <table width="100%" border="1">
-          <tr>
-            <td>Descripción de la avería:</td>
+        <table width="100%" style="margin: 10px 0 10px 0">
+          <tr style="border-top:1px solid; border-left:1px solid; border-right:1px solid">
+            <td><b>Descripción de la avería:</b></td>
           </tr>
-          <tr>
+          <tr style="border:0px 1px 1px 1px solid">
             <td><?php echo $result['descripcion']?></td>
           </tr>
         </table>
-        <table width="100%" border="1">
+        <table width="100%" border="1" style="margin:5px 0 5px 0">
           <tr>
             <td style="width:50%">Testeo previo a aceptación del aparato:</td>
             <td style="width:50%"><?php echo $preguntas['testeo']?></td>
@@ -93,7 +95,7 @@
             <td style="width:50%"><?php echo $preguntas['camaras']?></td>
           </tr>
         </table>
-        <table width="100%" border="1">
+        <table width="100%" border="1" style="margin:5px 0 5px 0">
           <tr>
             <td style="width:20%">Funda: <?php echo $preguntas['funda']?></td>
             <td style="width:20%">SIM: <?php echo $preguntas['sim']?></td>
@@ -102,14 +104,39 @@
             <td style="width:20%">Móvil de sustitución: <?php echo $preguntas['sustitucion']?></td>
           </tr>
         </table>
-        <table width="100%" border="1">
+        <table width="100%" border="1" style="margin:5px 0 5px 0">
           <tr>
             <td>iCLoud: <?php echo $preguntas['iCloud']?></td>
             <td>Contraseña: <?php echo $preguntas['password']?></td>
           </tr>
           <tr>
-            <td colspan="2">Presupuesto aproximado (IVA incluído) <?php echo $result['presupuesto']?> &euro;</td>
+            <td colspan="2">Presupuesto aproximado (IVA incluído): <b><?php echo $result['presupuesto']?> &euro;</b></td>
           </tr>
         </table>
+        <p style="margin:10px 0 5px 0;">Código de desbloqueo (poner numeros en el orden del patrón)</p>
+        <div style="float:left">
+          <table width="231px" border="1" style="margin:5px 0 5px 0; table-layout:fixed">
+            <tr>
+              <td style="height:35px;"></td>
+              <td style="height:35px;"></td>
+              <td style="height:35px;"></td>
+            </tr>
+            <tr>
+              <td style="height:35px;"></td>
+              <td style="height:35px;"></td>
+              <td style="height:35px;"></td>
+            </tr>
+            <tr>
+              <td style="height:35px;"></td>
+              <td style="height:35px;"></td>
+              <td style="height:35px;"></td>
+            </tr>
+          </table>
+        </div>
+        <div style="float:right; margin-right:10%">FIRMA DE LA TIENDA/CLIENTE:</div>
+        <p style="clear:both">RESULTADO DE LA REPARACION:
+          <?php if ($result['resultado_reparacion']==1) echo '<span style="color:red">DESFAVORABLE</span>';
+          else if ($result['resultado_reparacion']==2) echo '<span style="color:green">FAVORABLE</span>';?>
+        </p>
     </body>
 </html>
