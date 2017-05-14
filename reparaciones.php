@@ -1,45 +1,15 @@
 <?php
 /*
 Plugin Name: Incidencias y reparaciones
-Description: example plugin to demonstrate wordpress capatabilities
-Plugin URI: http://mac-blog.org.ua/
-Author URI: http://mac-blog.org.ua/
-Author: Marchenko Alexandr
-License: Public Domain
-Version: 1.1
+Description: Control de reparaciones para Colour Mobile
+Author: Hazmeweb
+Version: 1.0
 */
 
-/**
- * PART 1. Defining Custom Database Table
- * ============================================================================
- *
- * In this part you are going to define custom database table,
- * create it, update, and fill with some dummy data
- *
- * http://codex.wordpress.org/Creating_Tables_with_Plugins
- *
- * In case your are developing and want to check plugin use:
- *
- * DROP TABLE IF EXISTS wp_cte;
- * DELETE FROM wp_options WHERE option_name = 'custom_table_example_install_data';
- *
- * to drop table and option
- */
 
-/**
- * $custom_table_example_db_version - holds current database version
- * and used on plugin update to sync database tables
- */
 global $custom_table_example_db_version;
 $custom_table_example_db_version = '1.1'; // version changed from 1.0 to 1.1
-//define ( 'PTPDF_PATH', WP_PLUGIN_DIR . '/custom' );
 
-/**
- * register_activation_hook implementation
- *
- * will be called when user activates plugin first time
- * must create needed database tables
- */
 function custom_table_example_install()
 {
   global $wpdb;
@@ -93,30 +63,21 @@ function custom_table_example_install()
   dbDelta( $sql4 );
 
   //anadir rol de tecnico
-  add_role('tecnico','Técnico','manage_options');
+  global $wp_roles;
+  if ( ! isset( $wp_roles ) )
+      $wp_roles = new WP_Roles();
+
+  $edit = $wp_roles->get_role('editor');
+  //Adding a 'new_role' with all admin caps
+  $wp_roles->add_role('tecnico', 'Técnico', $adm->capabilities);
 }
 
 register_activation_hook(__FILE__, 'custom_table_example_install');
-
-/**
- * PART 2. Defining Custom Table List
- * ============================================================================
- *
- * In this part you are going to define custom table list class,
- * that will display your database records in nice looking table
- *
- * http://codex.wordpress.org/Class_Reference/WP_List_Table
- * http://wordpress.org/extend/plugins/custom-list-table-example/
- */
 
 if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 }
 
-/**
- * Custom_Table_Example_List_Table class that will display our custom table
- * records in nice table
- */
 class Custom_Table_Example_List_Table extends WP_List_Table
 {
     /**
@@ -194,7 +155,7 @@ class Custom_Table_Example_List_Table extends WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox" />', //Render a checkbox instead of text
-            'marca' => __('Marca', 'reparaciones'),
+            'marca' => __('Marca móvil', 'reparaciones'),
             'cliente' => __('Cliente','reparaciones'),
             'user_email'  => __('E-mail','reparaciones'),
             'fecha_registro' => __('Fecha registro', 'reparaciones'),
@@ -299,7 +260,7 @@ class Custom_Table_Example_List_Table extends WP_List_Table
         //consulta de busqueda
         if (isset( $_REQUEST ["s"] )){
            $search = $_REQUEST["s"];
-           $query .= " WHERE cliente.display_name LIKE '%%{$search}%%' OR marca LIKE '%%{$search}%%'";
+           $query .= " WHERE cliente.display_name LIKE '%%{$search}%%' OR marca LIKE '%%{$search}%%' OR cliente.user_email LIKE '%%{$search}%%'";
          }
         $this->items = $wpdb->get_results($wpdb->prepare($query, $per_page, $paged), ARRAY_A);
 
@@ -369,7 +330,7 @@ function reparaciones_handler()
     <?php echo $message; ?>
 
     <form id="persons-table" method="GET">
-        <?php $table->search_box('Buscar', 'search'); ?>
+        <?php $table->search_box('Buscar por cliente, email o marca', 'search'); ?>
         <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>"/>
         <?php $table->display() ?>
     </form>
@@ -390,23 +351,6 @@ function reparaciones_handler()
 <?php
 }
 
-/**
- * PART 4. Form for adding andor editing row
- * ============================================================================
- *
- * In this part you are going to add admin page for adding andor editing items
- * You cant put all form into this function, but in this example form will
- * be placed into meta box, and if you want you can split your form into
- * as many meta boxes as you want
- *
- * http://codex.wordpress.org/Data_Validation
- * http://codex.wordpress.org/Function_Reference/selected
- */
-
-/**
- * Form page handler checks is there some data posted and tries to save it
- * Also it renders basic wrapper in which we are callin meta box render
- */
 function reparaciones_add()
 {
 
@@ -494,14 +438,6 @@ function create_PDF(){
   include('pdf/pdf.php');
 }
 
-
-/**
- * Simple function that validates data and retrieve bool on success
- * and error message(s) on error
- *
- * @param $item
- * @return bool|string
- */
 function custom_table_example_validate_person($item)
 {
     $messages = array();

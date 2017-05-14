@@ -3,7 +3,7 @@
  add_action ('show_user_profile', 'show_clientemeta');
  add_action ('edit_user_profile', 'show_clientemeta');
  add_action('personal_options_update', 'save_clientemeta');
- //add_action('edit_user_profile', 'save_clientemeta');
+ add_action('edit_user_profile', 'save_clientemeta');
 
 function show_clientemeta($user){?>
   <h3>Datos adicionales de cliente</h3>
@@ -14,8 +14,8 @@ function show_clientemeta($user){?>
     </td>
   </table>
 <?php }
- function save_clientemeta($user_id){
-   if (!current_user_can('edit_user', $user_id)) return false;
-   return update_user_meta($user_id->ID,'dni', $_POST['dni']);
+ function save_clientemeta($user){
+   if (!current_user_can('edit_user', $user)) return false;
+   return update_user_meta($user->ID,'dni', $_POST['dni']);
  }
 ?>
