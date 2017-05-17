@@ -37,19 +37,26 @@ WHERE `id` = $id";
 
 $success = $wpdb->query($sql4);
 
-  if($success){
+if($success!==false){
     $table = $wpdb->prefix.'incidencias_listado_estados';
-    $data = array(
-      'estado_id' => $_POST['estados'],
-      'incidencia_id' => $id
-    );
-    $format = array(
-        '%s',
-        '%s'
-    );
-    $wpdb->insert( $table, $data, $format );
-    //mandar_mail
-    envio_mail($_POST['cliente'],$id);
+    $sql = "SELECT * FROM $table WHERE incidencia_id=$id ORDER BY fecha DESC";
+    $query = $wpdb->get_row($sql,ARRAY_A);
+    
+    //se manda el email si el estado de reparacion ha cambiado
+    if ($query['estado_id']!=$_POST['estados']){
+      $data = array(
+        'estado_id' => $_POST['estados'],
+        'incidencia_id' => $id
+      );
+      $format = array(
+          '%s',
+          '%s'
+      );
+      $wpdb->insert( $table, $data, $format );
+      //mandar_mail
+      envio_mail($_POST['cliente'],$id);
+    }
+
     $admin_url = get_admin_url();
     wp_redirect( $admin_url.'admin.php?page=reparaciones' );
   }
