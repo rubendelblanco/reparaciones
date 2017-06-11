@@ -17,15 +17,16 @@ function custom_table_example_install()
   $table_name = $wpdb->prefix . "incidencias_listado";
   $estados = $wpdb->prefix . "incidencias_estados";
   $pivote = $wpdb->prefix . "incidencias_listado_estados";
+  $users = $wpdb->prefix . "users";
 
-  $sql1 = "CREATE TABLE $estados (
+  $sql1 = "CREATE TABLE IF NOT EXISTS $estados (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     descripcion VARCHAR(256),
     PRIMARY KEY  (id)
   ) $charset_collate;
   ";
 
-  $sql2 = "CREATE TABLE $table_name (
+  $sql2 = "CREATE TABLE IF NOT EXISTS $table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     user_id bigint(20) UNSIGNED NOT NULL,
     tecnico_id bigint(20) UNSIGNED NOT NULL,
@@ -39,22 +40,22 @@ function custom_table_example_install()
     presupuesto VARCHAR(24),
     resultado_reparacion BOOLEAN NULL,
     numero_registro VARCHAR(16),
-    fecha_registro datetime DEFAULT current_timestamp NOT NULL,
+    fecha_registro timestamp DEFAULT current_timestamp NOT NULL,
     PRIMARY KEY  (id),
-    FOREIGN KEY (user_id) REFERENCES wp_users(id),
-    FOREIGN KEY (tecnico_id) REFERENCES wp_users(id)
+    FOREIGN KEY (user_id) REFERENCES {$users}(id),
+    FOREIGN KEY (tecnico_id) REFERENCES {$users}(id)
   ) $charset_collate;";
 
   $sql3 = "INSERT INTO $estados (id, descripcion) VALUES (1,'Móvil recibido en tienda'),(2,'Esperando piezas de reparación'),(3,'Reparando móvil'),(4,'Móvil reparado'),(5,'Cerrado'),(6,'Anulado')";
 
-  $sql4 = "CREATE TABLE $pivote (
+  $sql4 = "CREATE TABLE IF NOT EXISTS $pivote (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     estado_id mediumint(9) NOT NULL,
     incidencia_id mediumint(9) NOT NULL,
-    fecha datetime DEFAULT current_timestamp NOT NULL,
+    fecha timestamp DEFAULT current_timestamp NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY (estado_id) REFERENCES wp_incidencias_estados(id),
-    FOREIGN KEY (incidencia_id) REFERENCES wp_incidencias_listado(id)
+    FOREIGN KEY (estado_id) REFERENCES {$estados}(id),
+    FOREIGN KEY (incidencia_id) REFERENCES {$table_name}(id)
   ) $charset_collate;";
 
   require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -244,9 +245,7 @@ class Custom_Table_Example_List_Table extends WP_List_Table
 
         // [REQUIRED] define $items array
         // notice that last argument is ARRAY_A, so we will retrieve array
-        //SELECT DISTINCT cliente.user_email, cliente.display_name AS cliente, tecnico.display_name AS tecnico, descripcion, marca, fecha_entrega FROM
-        //wp_users, wp_incidencias_listado JOIN wp_users cliente ON cliente.ID = wp_incidencias_listado.user_id JOIN wp_users tecnico ON tecnico.ID = wp_incidencias_listado.tecnico_id
-        $query = "SELECT DISTINCT cliente.user_email, cliente.display_name AS cliente, tecnico.display_name AS tecnico, wp_incidencias_listado.id, descripcion, marca, fecha_registro".
+        $query = "SELECT DISTINCT cliente.user_email, cliente.display_name AS cliente, tecnico.display_name AS tecnico, {$table_name}.id, descripcion, marca, fecha_registro".
          " FROM $table_users, $table_name JOIN $table_users cliente ON cliente.ID = ".$table_name.".user_id JOIN $table_users tecnico ON tecnico.ID = ".$table_name.".tecnico_id";
 
         //consulta de busqueda
@@ -413,16 +412,16 @@ function reparaciones_alta(){
           '%s'
       );
       $wpdb->insert( $table, $data, $format );
-      //nuevo registro para esa incidencia: Ymd-$id
-      /*
-      $fecha = date("Ymd");
-      $lastid = $wpdb->insert_id; //el id
-      $registro = $fecha.'-'.$lastid;
-      echo 'id: '.$lastid.' registro: '.$registro;
-      $sql = "UPDATE ". $wpdb->prefix."incidencias_listado SET numero_registro='".$registro."' WHERE id=$lastid";
-      echo $sql;
-      die();
-      $wpdb->query($sql);*/
+      //mandar email de notificacion
+
+      $cliente = get_userdata( $_POST['cliente'] );
+      $to = 'juanmag.toro@gmail.com';
+      //$to = $cliente->user_email;
+      $subject = 'Nueva reparación en Colour Mobile Avila';
+      $body = 'Una nueva reparación ha quedado registrada en nuestra BBDD.<br> <b>Movil:</b> '.$_POST['marca'].'<br> <b>Descripción de avería:</b> '.$_POST['descripcion'];
+      $headers = array('Content-Type: text/html; charset=UTF-8');
+      wp_mail( $to, $subject, $body, $headers );
+
       $admin_url = get_admin_url();
       wp_redirect( $admin_url.'admin.php?page=reparaciones' );
     }

@@ -27,7 +27,7 @@ if ( ! empty( $_POST ) ) {
     'sustitucion' => $_POST['sustitucion']
   );
 
-  $sql4 = "UPDATE `wp_incidencias_listado` SET `user_id` = ".$_POST['cliente'].",`tecnico_id` = ".$_POST['tecnico'].",
+  $sql4 = "UPDATE $table SET `user_id` = ".$_POST['cliente'].",`tecnico_id` = ".$_POST['tecnico'].",
   `marca` = '".$_POST['marca']."',`descripcion` = '".$_POST['descripcion']."' ,`password` = '".$_POST['contrasena']."',`pinsim` = '".$_POST['pinsim']."',
 `preguntas` = '".serialize($preguntas)."',
 `presupuesto` = '".$_POST['presupuesto']."',
@@ -41,7 +41,7 @@ if($success!==false){
     $table = $wpdb->prefix.'incidencias_listado_estados';
     $sql = "SELECT * FROM $table WHERE incidencia_id=$id ORDER BY fecha DESC";
     $query = $wpdb->get_row($sql,ARRAY_A);
-    
+
     //se manda el email si el estado de reparacion ha cambiado
     if ($query['estado_id']!=$_POST['estados']){
       $data = array(
