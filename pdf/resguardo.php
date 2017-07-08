@@ -38,13 +38,13 @@
             foreach ($preguntas_raw as $key => $value){
 
               if ($value == '1') {
-                $preguntas[$key] = '<span style="color:green; font-weight:bold">S√≠</span>';
+                $preguntas[$key] = '<span style="color:green; font-weight:bold">SÌ</span>';
               }
               else $preguntas[$key] = '<span style="color:red;font-weight:bold">No</span>';
             }
         ?>
 
-        <h3 class="header">Colour Mobile √Åvila - resguardo de reparaci√≥n n¬∫ <?php echo $result['id']?></h3>
+        <h3 class="header">Colour Mobile ¡vila - resguardo de reparaciÛn n∫ <?php echo $result['id']?></h3>
 
         <table width="100%" border="0">
           <tr>
@@ -59,7 +59,7 @@
         </table>
         <table width="100%" style="margin: 10px 0 10px 0">
           <tr style="border-top:1px solid; border-left:1px solid; border-right:1px solid">
-            <td><b>Descripci√≥n de la aver√≠a:</b></td>
+            <td><b>DescripciÛn de la averÌa:</b></td>
           </tr>
           <tr style="border:0px 1px 1px 1px solid">
             <td><?php echo $result['descripcion']?></td>
@@ -67,7 +67,7 @@
         </table>
         <table width="100%" border="1" style="margin:5px 0 5px 0">
           <tr>
-            <td style="width:50%">Testeo previo a aceptaci√≥n del aparato:</td>
+            <td style="width:50%">Testeo previo a aceptaciÛn del aparato:</td>
             <td style="width:50%"><?php echo $preguntas['testeo']?></td>
           </tr>
           <tr>
@@ -83,11 +83,11 @@
             <td style="width:50%"><?php echo $preguntas['enciendeYApaga']?></td>
           </tr>
           <tr>
-            <td style="width:50%">Funcionan altavoces y micr√≥fonos:</td>
+            <td style="width:50%">Funcionan altavoces y micrÛfonos:</td>
             <td style="width:50%"><?php echo $preguntas['altavoces']?></td>
           </tr>
           <tr>
-            <td style="width:50%">Funciona la pantalla t√°ctil de manera precisa:</td>
+            <td style="width:50%">Funciona la pantalla t·ctil de manera precisa:</td>
             <td style="width:50%"><?php echo $preguntas['pantalla']?></td>
           </tr>
           <tr>
@@ -95,11 +95,11 @@
             <td style="width:50%"><?php echo $preguntas['carga']?></td>
           </tr>
           <tr>
-            <td style="width:50%">Existe alg√∫n desperfecto en la carcasa o pantalla:</td>
+            <td style="width:50%">Existe alg˙n desperfecto en la carcasa o pantalla:</td>
             <td style="width:50%"><?php echo $preguntas['carcasa']?></td>
           </tr>
           <tr>
-            <td style="width:50%">Funcionan las c√°maras:</td>
+            <td style="width:50%">Funcionan las c·maras:</td>
             <td style="width:50%"><?php echo $preguntas['camaras']?></td>
           </tr>
         </table>
@@ -109,19 +109,19 @@
             <td style="width:20%">SIM: <?php echo $preguntas['sim']?></td>
             <td style="width:20%">SD: <?php echo $preguntas['sd']?></td>
             <td style="width:20%">Cargador: <?php echo $preguntas['cargador']?></td>
-            <td style="width:20%">M√≥vil de sustituci√≥n: <?php echo $preguntas['sustitucion']?></td>
+            <td style="width:20%">MÛvil de sustituciÛn: <?php echo $preguntas['sustitucion']?></td>
           </tr>
         </table>
         <table width="100%" border="1" style="margin:5px 0 5px 0">
           <tr>
             <td>iCLoud: <?php echo $preguntas['iCloud']?></td>
-            <td>Contrase√±a: <?php echo $preguntas['password']?></td>
+            <td>ContraseÒa: <?php echo $preguntas['password']?></td>
           </tr>
           <tr>
-            <td colspan="2">Presupuesto aproximado (IVA inclu√≠do): <b><?php echo $result['presupuesto']?> &euro;</b></td>
+            <td colspan="2">Presupuesto aproximado (IVA incluÌdo): <b><?php echo $result['presupuesto']?> &euro;</b></td>
           </tr>
         </table>
-        <p style="margin:10px 0 5px 0;">C√≥digo de desbloqueo (poner numeros en el orden del patr√≥n)</p>
+        <p style="margin:10px 0 5px 0;">CÛdigo de desbloqueo (poner numeros en el orden del patrÛn)</p>
         <div style="float:left">
           <table width="231px" border="1" style="margin:5px 0 5px 0; table-layout:fixed">
             <tr>

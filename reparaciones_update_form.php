@@ -74,14 +74,14 @@ function envio_mail($id_user,$id){
 
   foreach($result_estados as $v){
     $time = strtotime($r['fecha']);
-    $lista_estados .= '<li>'.$v['descripcion'].' el dÃ­a '.date("d/m/Y", $time).' a las '.date("H:i:s", $time).'</li>';
+    $lista_estados .= '<li>'.$v['descripcion'].' el día '.date("d/m/Y", $time).' a las '.date("H:i:s", $time).'</li>';
   }
 
   $direccion = get_userdata( $id_user )->user_email;
-  $subject = 'ActualizaciÃ³n de su reparaciÃ³n';
+  $subject = 'Actualización de su reparación';
   $headers = array('Content-Type: text/html; charset=UTF-8');
-  $body = '<p>Su reparaciÃ³n del movil modelo '.$result_estados[0]['marca'].' con referencia nÂº '.$result_estados[0]['id'].' ha sido actualizada.</p>';
-  $body .= '<p>El historial de estado de su mÃ³vil es el siguiente:</p> ';
+  $body = '<p>Su reparación del movil modelo '.$result_estados[0]['marca'].' con referencia nº '.$result_estados[0]['id'].' ha sido actualizada.</p>';
+  $body .= '<p>El historial de estado de su móvil es el siguiente:</p> ';
   $body .= '<ul>'.$lista_estados.'</ul>';
   wp_mail( $direccion, $subject, $body, $headers );
 }

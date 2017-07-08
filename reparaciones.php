@@ -6,7 +6,6 @@ Author: Hazmeweb
 Version: 1.0
 */
 
-
 global $custom_table_example_db_version;
 $custom_table_example_db_version = '1.1'; // version changed from 1.0 to 1.1
 
@@ -46,7 +45,7 @@ function custom_table_example_install()
     FOREIGN KEY (tecnico_id) REFERENCES {$users}(id)
   ) $charset_collate;";
 
-  $sql3 = "INSERT INTO $estados (id, descripcion) VALUES (1,'M√≥vil recibido en tienda'),(2,'Esperando piezas de reparaci√≥n'),(3,'Reparando m√≥vil'),(4,'M√≥vil reparado'),(5,'Cerrado'),(6,'Anulado')";
+  $sql3 = "INSERT INTO $estados (id, descripcion) VALUES (1,'MÛvil recibido en tienda'),(2,'Esperando piezas de reparaciÛn'),(3,'Reparando mÛvil'),(4,'MÛvil reparado'),(5,'Cerrado'),(6,'Anulado')";
 
   $sql4 = "CREATE TABLE IF NOT EXISTS $pivote (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -65,7 +64,7 @@ function custom_table_example_install()
   dbDelta( $sql4 );
 }
 
-register_activation_hook(__FILE__, 'custom_table_example_install');
+//register_activation_hook(__FILE__, 'custom_table_example_install');
 
 if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
@@ -114,7 +113,7 @@ class Custom_Table_Example_List_Table extends WP_List_Table
         $actions = array(
             'edit' => sprintf('<a href="?page=reparaciones_update&id=%s">%s</a>', $item['id'], __('Editar', 'reparaciones')),
             'delete' => sprintf('<a href="?page=%s&action=delete&id=%s">%s</a>', $_REQUEST['page'], $item['id'], __('Borrar', 'reparaciones')),
-            'PDF' => sprintf('<a href="#" class="pdf-conversion" data-action="http://localhost/wordpress/wp-content/plugins/reparaciones/pdf/pdf.php?id=%s">%s</a>', $item['id'], __('PDF', 'reparaciones')),
+            'PDF' => sprintf('<a href="#" class="pdf-conversion" data-action="http://tiendacolourmobile.es/desarrollo/wp-content/plugins/reparaciones/pdf/pdf.php?id=%s">%s</a>', $item['id'], __('PDF', 'reparaciones')),
         );
 
         return sprintf('%s %s',
@@ -148,11 +147,11 @@ class Custom_Table_Example_List_Table extends WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox" />', //Render a checkbox instead of text
-            'marca' => __('Marca m√≥vil', 'reparaciones'),
+            'marca' => __('Marca mÛvil', 'reparaciones'),
             'cliente' => __('Cliente','reparaciones'),
             'user_email'  => __('E-mail','reparaciones'),
             'fecha_registro' => __('Fecha registro', 'reparaciones'),
-            'tecnico' => __('T√©cnico', 'reparaciones')
+            'tecnico' => __('TÈcnico', 'reparaciones')
         );
         return $columns;
     }
@@ -285,7 +284,7 @@ function custom_table_example_admin_menu()
     // add new will be described in next part
     add_submenu_page('reparaciones', __('Crear nueva', 'reparaciones'), __('Crear nueva', 'reparaciones'), 'activate_plugins', 'reparaciones_form', 'reparaciones_add');
     //Estas paginas no aparecen, parent_slug=null
-    add_submenu_page( null, __('Actualizar reparaci√≥n',''), __('Actualizar reparaci√≥n',''), 'activate_plugins', 'reparaciones_update', 'reparaciones_update');
+    add_submenu_page( null, __('Actualizar reparaciÛn',''), __('Actualizar reparaciÛn',''), 'activate_plugins', 'reparaciones_update', 'reparaciones_update');
     add_submenu_page( null, __('Crear PDF',''), __('Crear PDF',''), 'activate_plugins', 'create_PDF', 'create_PDF');
 }
 
@@ -316,7 +315,7 @@ function reparaciones_handler()
 
     <div class="icon32 icon32-posts-post" id="icon-edit"><br></div>
     <h2><?php _e('Reparaciones', 'custom_table_example')?> <a class="add-new-h2"
-                                 href="<?php echo get_admin_url(get_current_blog_id(), 'admin.php?page=reparaciones_form');?>"><?php _e('Nueva reparaci√≥n', 'custom_table_example')?></a>
+                                 href="<?php echo get_admin_url(get_current_blog_id(), 'admin.php?page=reparaciones_form');?>"><?php _e('Nueva reparaciÛn', 'custom_table_example')?></a>
     </h2>
     <?php echo $message; ?>
 
@@ -417,8 +416,8 @@ function reparaciones_alta(){
       $cliente = get_userdata( $_POST['cliente'] );
       $to = 'juanmag.toro@gmail.com';
       //$to = $cliente->user_email;
-      $subject = 'Nueva reparaci√≥n en Colour Mobile Avila';
-      $body = 'Una nueva reparaci√≥n ha quedado registrada en nuestra BBDD.<br> <b>Movil:</b> '.$_POST['marca'].'<br> <b>Descripci√≥n de aver√≠a:</b> '.$_POST['descripcion'];
+      $subject = 'Nueva reparaciÛn en Colour Mobile Avila';
+      $body = 'Una nueva reparaciÛn ha quedado registrada en nuestra BBDD.<br> <b>Movil:</b> '.$_POST['marca'].'<br> <b>DescripciÛn de averÌa:</b> '.$_POST['descripcion'];
       $headers = array('Content-Type: text/html; charset=UTF-8');
       wp_mail( $to, $subject, $body, $headers );
 
@@ -430,7 +429,7 @@ function reparaciones_alta(){
 }
 
 function reparaciones_update(){
-  include('update.php');
+  include(plugin_dir_path( __FILE__ ) .'update.php');
 }
 
 function reparaciones_update_form(){
@@ -453,7 +452,7 @@ function custom_table_example_validate_person($item)
     return implode('<br />', $messages);
 }
 
-/*Comprueba si woocommerce est√° instalado*/
+/*Comprueba si woocommerce est· instalado*/
 function checar_woocommerce(){
   if ( !is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
     echo '<div class="notice notice-error is-dismissible"><p>';
@@ -491,7 +490,7 @@ function crear_rol_tecnico() {
 
     );
 
-    add_role('tecnico', 'T√©cnico', $permisos);
+    add_role('tecnico', 'TÈcnico', $permisos);
   }
 }
 

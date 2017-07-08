@@ -15,7 +15,7 @@ $db = new DB(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_CHARSET);
         <script src="//code.jquery.com/jquery-1.12.4.min.js" ></script>
     </head>
     <body>
-        <h1 class="header">QuÃ© tiempos, cuando se escibÃ­a algo</h1>
+        <h1 class="header">Qué tiempos, cuando se escibía algo</h1>
 
         <?php 
             $posts = $db->matrix('SELECT * FROM ' . $table_prefix . 'posts WHERE post_type = "post" ORDER BY post_date DESC');

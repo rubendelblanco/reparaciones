@@ -23,7 +23,7 @@
  ?>
 
 <div class="wrap">
-  <h1 class="wp-heading-inline">Ficha de reparaciÃ³n</h1>
+  <h1 class="wp-heading-inline">Ficha de reparación</h1>
   <h2 class="nav-tab-wrapper">
      <a href="#tab-1" class="nav-tab nav-tab-active">Estado</a>
      <a href="#tab-2" class="nav-tab">Datos</a>
@@ -38,7 +38,7 @@
           <h3 class="hndle"><span>Estado</span></h3>
         </div>
         <div class="inside">
-          <h4 class="hndle"><span>Estado de la reparaciÃ³n</span></h4>
+          <h4 class="hndle"><span>Estado de la reparación</span></h4>
           <div class="form-field form-required term-name-wrap" style="display:inline-block; width:150px">
           <select name="estados">
             <?php foreach($result_estados as $estado){
@@ -53,7 +53,7 @@
         </div>
         <div class="inside">
           <div class="form-field form-required term-name-wrap" style="display:inline-block">
-            Resultado de la reparaciÃ³n:
+            Resultado de la reparación:
             <input type="radio" name="resultado_reparacion" value="2" <?php if ($result['resultado_reparacion']==2) echo 'checked'?>> Favorable
             <input type="radio" name="resultado_reparacion" value="1" <?php if ($result['resultado_reparacion']==1) echo 'checked'?>> Desfavorable
           </div>
@@ -63,7 +63,7 @@
           <ul>
             <?php foreach ($result2 as $r):
               $time = strtotime($r['fecha']);
-              echo '<li> <b>'.$r['descripcion'].'</b> registrado el dÃ­a '.date("d/m/Y", $time).' a las '.date("H:i:s", $time).'</li>';
+              echo '<li> <b>'.$r['descripcion'].'</b> registrado el día '.date("d/m/Y", $time).' a las '.date("H:i:s", $time).'</li>';
               endforeach;
             ?>
           </ul>
@@ -81,13 +81,13 @@
         <div class="inside">
           <h4> Fecha de entrega </h4>
           <div class="form-field form-required term-name-wrap" style="display:inline-block; width:60px">
-            <label for="dia">DÃ­a</label> <input id = "dia" type="text" name="dia" value="<?php echo $dia; ?>">
+            <label for="dia">Día</label> <input id = "dia" type="text" name="dia" value="<?php echo $dia; ?>">
           </div>
           <div class="form-field form-required term-name-wrap" style="display:inline-block; width:60px">
             <label for="mes">Mes</label> <input id="mes" type="text" name="mes" value="<?php echo $mes; ?>">
           </div>
           <div class="form-field form-required term-name-wrap"  style="display:inline-block; width:60px" >
-            <label for="ano">AÃ±o</label> <input id = "ano" type="text" name="ano" value="<?php echo $ano; ?>">
+            <label for="ano">Año</label> <input id = "ano" type="text" name="ano" value="<?php echo $ano; ?>">
           </div>
         </div>
         <div class="inside">
@@ -107,7 +107,7 @@
             <label for="marca">Marca y/o modelo</label> <input class="short" type="text" value="<?php echo $result['marca']?>" name="marca">
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
-              <label for="rom">ContraseÃ±a iCloud</label>
+              <label for="rom">Contraseña iCloud</label>
               <input type="text" name="contrasena" value="<?php echo $result['password'];?>"/>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
@@ -115,7 +115,7 @@
             <input type="text" name="pinsim" value="<?php echo $result['pinsim'];?>"/>
           </div>
           <div style="width:50%" class="form-field form-required term-name-wrap">
-            <label for="descripcion">DescripciÃ³n de averÃ­a</label>
+            <label for="descripcion">Descripción de avería</label>
             <textarea rows="10" columns="40" class="short" type="text" name="descripcion"><?php echo $result['descripcion'];?></textarea>
           </div>
         </div>
@@ -123,82 +123,82 @@
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="testeo" value="0" />
             <input type="checkbox" name="testeo" value="1" <?php if ($preguntas['testeo']==1) echo 'checked' ?>/>
-            <label for="testeo">Testeo previo a aceptaciÃ³n del aparato*</label>
+            <label for="testeo">Testeo previo a aceptación del aparato*</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="rom" value="0" />
             <input type="checkbox" name="rom" value="1" <?php if ($preguntas['testeo']==1) echo 'rom' ?>/>
-            <label for="rom">Â¿Se ha cambiado la ROM original?</label>
+            <label for="rom">¿Se ha cambiado la ROM original?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="reparadoPrevio" value="0" />
             <input type="checkbox" name="reparadoPrevio" value="1" <?php if ($preguntas['reparadoPrevio']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿Ha sido previamente abierto o reparado?</label>
+            <label for="rom">¿Ha sido previamente abierto o reparado?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="enciendeYApaga" value="0" />
             <input type="checkbox" name="enciendeYApaga" value="1" <?php if ($preguntas['enciendeYApaga']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿Enciende y apaga con normalidad?</label>
+            <label for="rom">¿Enciende y apaga con normalidad?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="altavoces" value="0" />
             <input type="checkbox" name="altavoces" value="1" <?php if ($preguntas['altavoces']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿Funcionan altavoces y micrÃ³fono?</label>
+            <label for="rom">¿Funcionan altavoces y micrófono?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="pantalla" value="0" />
             <input type="checkbox" name="pantalla" value="1" <?php if ($preguntas['pantalla']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿Funciona la pantalla tÃ¡ctil de manera precisa?</label>
+            <label for="rom">¿Funciona la pantalla táctil de manera precisa?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="carga" value="0" />
             <input type="checkbox" name="carga" value="1" <?php if ($preguntas['carga']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿Carga de forma correcta?</label>
+            <label for="rom">¿Carga de forma correcta?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="carcasa" value="0" />
             <input type="checkbox" name="carcasa" value="1" <?php if ($preguntas['carcasa']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿Existe algÃºn desperfecto en la carcasa o pantalla?</label>
+            <label for="rom">¿Existe algún desperfecto en la carcasa o pantalla?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="camaras" value="0" />
             <input type="checkbox" name="camaras" value="1" <?php if ($preguntas['camaras']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿Funcionan las cÃ¡maras?</label>
+            <label for="rom">¿Funcionan las cámaras?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="iCloud" value="0" />
             <input type="checkbox" name="iCloud" value="1" <?php if ($preguntas['iCloud']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿iCloud?</label>
+            <label for="rom">¿iCloud?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="funda" value="0" />
             <input type="checkbox" name="funda" value="1" <?php if ($preguntas['funda']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿Tiene Funda?</label>
+            <label for="rom">¿Tiene Funda?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="sim" value="0" />
             <input type="checkbox" name="sim" value="1" <?php if ($preguntas['sim']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿Tiene tarjeta SIM?</label>
+            <label for="rom">¿Tiene tarjeta SIM?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="sd" value="0" />
             <input type="checkbox" name="sd" value="1" <?php if ($preguntas['sd']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿Tiene tarjeta SD?</label>
+            <label for="rom">¿Tiene tarjeta SD?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="cargador" value="0" />
             <input type="checkbox" name="cargador" value="1" <?php if ($preguntas['cargador']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿Tiene cargador?</label>
+            <label for="rom">¿Tiene cargador?</label>
           </div>
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
             <input type="hidden" name="sustitucion" value="0" />
             <input type="checkbox" name="sustitucion" value="1" <?php if ($preguntas['sustitucion']==1) echo 'checked' ?>/>
-            <label for="rom">Â¿Se entrega mÃ³vil de sustituciÃ³n al cliente?</label>
+            <label for="rom">¿Se entrega móvil de sustitución al cliente?</label>
           </div>
         </div>
         <div class="inside">
           <div style="display:inline-block;width:25%" class="form-field form-required term-name-wrap">
-            <label for="presupuesto">Presupuesto aproximado de la reparaciÃ³n (IVA incluÃ­do)</label>
+            <label for="presupuesto">Presupuesto aproximado de la reparación (IVA incluído)</label>
             <input type="text" value="<?php echo $result['presupuesto'];?>" name="presupuesto">
           </div>
         </div>
